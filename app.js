@@ -8,7 +8,7 @@ require('dotenv').config();
 const PORT = 5000;
 const client_id = process.env.CLIENT_ID;
 const client_secret = process.env.CLIENT_SECRET;
-const redirect_uri = 'http://127.0.0.1:5000/callback';
+const redirect_uri = process.env.REDIRECT_URI || `http://localhost:${PORT}/callback`;
 
 const app = express();
 app.set('view engine', 'ejs');
