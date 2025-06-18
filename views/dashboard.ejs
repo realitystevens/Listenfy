@@ -1,0 +1,31 @@
+
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dashboard | Listenfy</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="/style/global.css">
+    <link rel="stylesheet" href="/style/dashboard.css">
+</head>
+<body>
+    <h1>Spotify Mood Report</h1>
+    <p><strong>Mood:</strong> <%= mood %></p>
+    <p><strong>Summary:</strong> <%= summary %></p>
+    <h2>Top Artists</h2>
+    <ul>
+        <% artists.forEach(a => { %>
+        <li><%= a %></li>
+        <% }); %>
+    </ul>
+    <h2>Top Genres</h2>
+    <ul>
+        <% genres.forEach(g => { %>
+        <li><%= g %></li>
+        <% }); %>
+    </ul>
+</body>
+</html>
