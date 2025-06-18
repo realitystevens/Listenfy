@@ -16,7 +16,8 @@
 }
 
 .main__desc {
-    margin: 0.5rem 0rem 3rem 0rem;
+    margin: 0.5rem auto 3rem auto;
+    max-width: 350px;
 }
 
 .spotify_connect_button {
@@ -25,9 +26,7 @@
     border: none;
     padding: 0.75rem 1.5rem;
     font-size: 1rem;
-    border-radius: 10px;
-    cursor: pointer;
-    transition: background-color 0.3s ease;
+    border-radius: 10px; 
     display: flex;
     align-items: center;
     justify-content: center;
@@ -37,10 +36,23 @@
 }
 
 .spotify_connect_button:hover {
-    background-color: var(--spotify-black); /* Darker green on hover */
+    background-color: var(--spotify-black);
 }
 
 .spotify_connect_button__icon {
     width: 5rem;
-    margin-left: 0.5rem;
+    margin-left: 0.35rem;
+}
+
+.footer {
+    margin-top: 5rem;
+    padding: 0px 20px
+}
+
+.footer__text {
+    font-size: 0.8rem;
+    color: #666;
+    border-top: #66666681 solid 1px;
+    padding-top: 2rem;
+    max-width: 450px;
 }
