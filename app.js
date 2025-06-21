@@ -3,12 +3,13 @@ const querystring = require('querystring');
 const axios = require('axios');
 const session = require('express-session');
 const path = require('path');
+const { url } = require('inspector');
 require('dotenv').config();
 
 const PORT = 5000;
 const client_id = process.env.CLIENT_ID;
 const client_secret = process.env.CLIENT_SECRET;
-const redirect_uri = process.env.REDIRECT_URI || `http://localhost:${PORT}/callback`;
+const redirect_uri = process.env.REDIRECT_URI || `http://127.0.0.1:${PORT}/callback`;
 
 const app = express();
 app.set('view engine', 'ejs');
@@ -86,17 +87,28 @@ app.get('/dashboard', async (req, res) => {
       headers: { Authorization: 'Bearer ' + token }
     });
 
-    const artistNames = data.items.map(artist => artist.name);
-    const genres = {};
-    data.items.forEach(artist => {
+    const genreCounts = {};
+
+    // Collect artist names, genres, and image URLs
+    const artists = data.items.map(artist => ({
+      name: artist.name,
+      image: artist.images && artist.images.length > 0 ? artist.images[0].url : null,
+      url: artist.external_urls.spotify,
+      popularity: artist.popularity,
+      followers: artist.followers ? artist.followers.total : 0,
+      genres: artist.genres
+    }));
+
+    // Count genres
+    artists.forEach(artist => {
       artist.genres.forEach(genre => {
-        genres[genre] = (genres[genre] || 0) + 1;
+        genreCounts[genre] = (genreCounts[genre] || 0) + 1;
       });
     });
 
-    const sortedGenres = Object.entries(genres)
-      .sort((a, b) => b[1] - a[1])
-      .map(g => g[0]);
+    // Sort genres by count
+    const sortedGenres = Object.keys(genreCounts).sort((a, b) => genreCounts[b] - genreCounts[a]);
+    const counts = sortedGenres.map(genre => genreCounts[genre]);
 
     let mood = 'Reflective';
     let summary = 'Your recent music taste seems deep and meaningful.';
@@ -109,7 +121,15 @@ app.get('/dashboard', async (req, res) => {
       summary = 'Your music suggests you might be feeling a little down. Be kind to yourself.';
     }
 
-    res.render('dashboard', { mood, summary, artists: artistNames, genres: sortedGenres });
+    res.render('dashboard', 
+      { 
+        mood, 
+        summary, 
+        artists, 
+        genres: sortedGenres,
+        counts
+      }
+    );
 
   } catch (err) {
     console.error(err);
