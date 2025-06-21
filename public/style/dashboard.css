@@ -14,6 +14,16 @@
     padding-left: 20px; 
 }
 
+.artist__details {
+    display: flex;
+    align-items: center;
+    margin-bottom: 10px;
+}
+
+.artist__image {
+    width: 40px;
+}
+
 @media only screen and (min-width: 500px) {
     .__wrapper {
         max-width: 500px;
