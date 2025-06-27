@@ -21,10 +21,10 @@ const analyzeMood = (audioFeatures) => {
     acc.speechiness += track.speechiness || 0;
     acc.tempo += track.tempo || 0;
     acc.count++;
+    
     return acc;
   }, {
-    valence: 0, energy: 0, danceability: 0, acousticness: 0,
-    instrumentalness: 0, liveness: 0, speechiness: 0, tempo: 0, count: 0
+    valence: 0, energy: 0, danceability: 0, acousticness: 0, instrumentalness: 0, liveness: 0, speechiness: 0, tempo: 0, count: 0
   });
 
   const count = avgFeatures.count;
@@ -136,8 +136,7 @@ router.post('/analyze', async (req, res) => {
 // Get mood trends over time
 router.get('/trends', async (req, res) => {
   try {
-    // This would typically fetch from a database
-    // For now, return mock trend data
+    // Mock trend data
     const trends = [
       { date: '2024-01-01', mood: 'happy', confidence: 0.8 },
       { date: '2024-01-02', mood: 'content', confidence: 0.7 },

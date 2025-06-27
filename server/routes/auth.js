@@ -1,12 +1,14 @@
 import express from 'express';
 import SpotifyWebApi from 'spotify-web-api-node';
+import dotenv from 'dotenv';
 
+dotenv.config();
 const router = express.Router();
 
 const spotifyApi = new SpotifyWebApi({
   clientId: process.env.SPOTIFY_CLIENT_ID,
   clientSecret: process.env.SPOTIFY_CLIENT_SECRET,
-  redirectUri: process.env.SPOTIFY_REDIRECT_URI || 'http://localhost:5000/api/auth/callback'
+  redirectUri: process.env.SPOTIFY_REDIRECT_URI || 'http://127.0.0.1:5000/api/auth/callback'
 });
 
 // Generate Spotify authorization URL
@@ -18,8 +20,10 @@ router.get('/login', (req, res) => {
     'user-read-recently-played',
     'user-read-playback-state',
     'user-read-currently-playing',
+    'user-library-read',
     'playlist-modify-public',
-    'playlist-modify-private'
+    'playlist-modify-private',
+    'playlist-read-private'
   ];
   
   const authorizeURL = spotifyApi.createAuthorizeURL(scopes, 'state');
@@ -28,22 +32,18 @@ router.get('/login', (req, res) => {
 
 // Handle Spotify callback
 router.get('/callback', async (req, res) => {
-  const { code } = req.query;
-  
+  const code = req.query.code;
+  if (!code) return res.status(400).json({ error: 'Missing code' });
+
   try {
     const data = await spotifyApi.authorizationCodeGrant(code);
-    const { access_token, refresh_token, expires_in } = data.body;
-    
-    // Store tokens in session
-    req.session.accessToken = access_token;
-    req.session.refreshToken = refresh_token;
-    req.session.expiresIn = expires_in;
-    
-    // Redirect to frontend
-    res.redirect(process.env.NODE_ENV === 'production' ? '/' : 'http://localhost:5173/');
-    
-  } catch (error) {
-    console.error('Error getting tokens:', error);
+    req.session.accessToken = data.body.access_token;
+    req.session.refreshToken = data.body.refresh_token;
+    req.session.save(() => {
+      res.redirect(process.env.NODE_ENV === 'production' ? '/' : 'http://127.0.0.1:5173/');
+    });
+  } catch (err) {
+    console.error('Failed to authenticate:', err.body || err);
     res.status(400).json({ error: 'Failed to authenticate' });
   }
 });

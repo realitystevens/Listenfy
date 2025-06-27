@@ -3,6 +3,18 @@ import SpotifyWebApi from 'spotify-web-api-node';
 
 const router = express.Router();
 
+// Initialize Spotify API client
+function getSpotifyApi(req) {
+  const spotifyApi = new SpotifyWebApi({
+    clientId: process.env.SPOTIFY_CLIENT_ID,
+    clientSecret: process.env.SPOTIFY_CLIENT_SECRET,
+    redirectUri: process.env.SPOTIFY_REDIRECT_URI || 'http://127.0.0.1:5000/api/auth/callback'
+  });
+  if (req.session.accessToken) spotifyApi.setAccessToken(req.session.accessToken);
+  if (req.session.refreshToken) spotifyApi.setRefreshToken(req.session.refreshToken);
+  return spotifyApi;
+}
+
 // Middleware to check authentication
 const requireAuth = (req, res, next) => {
   if (!req.session.accessToken) {
@@ -71,19 +83,25 @@ router.get('/recent', requireAuth, async (req, res) => {
 });
 
 // Get audio features for tracks
-router.get('/audio-features', requireAuth, async (req, res) => {
+router.get('/audio-features', async (req, res) => {
+  const ids = req.query.ids;
+  if (!ids) return res.status(400).json({ error: 'Missing ids' });
+
+  const idArray = ids.split(',');
+  if (idArray.length > 100) {
+    return res.status(400).json({ error: 'Too many track IDs (max 100 allowed)' });
+  }
+
   try {
-    const { ids } = req.query;
-    if (!ids) {
-      return res.status(400).json({ error: 'Track IDs required' });
+    const spotifyApi = getSpotifyApi(req);
+    if (!req.session.accessToken) {
+      return res.status(401).json({ error: 'Not authenticated' });
     }
-    
-    const trackIds = ids.split(',');
-    const data = await req.spotifyApi.getAudioFeaturesForTracks(trackIds);
+    const data = await spotifyApi.getAudioFeaturesForTracks(idArray);
     res.json(data.body);
-  } catch (error) {
-    console.error('Error fetching audio features:', error);
-    res.status(500).json({ error: 'Failed to fetch audio features' });
+  } catch (err) {
+    console.error('Error fetching audio features:', err.body || err);
+    res.status(500).json({ error: 'Failed to fetch audio features', details: err.body || err.message });
   }
 });
 

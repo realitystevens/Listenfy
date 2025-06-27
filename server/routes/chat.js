@@ -7,7 +7,7 @@ const router = express.Router();
 let genAI = null;
 let model = null;
 
-if (process.env.GEMINI_API_KEY && process.env.GEMINI_API_KEY !== 'your_gemini_api_key') {
+if (process.env.GEMINI_API_KEY) {
   genAI = new GoogleGenerativeAI(process.env.GEMINI_API_KEY);
   model = genAI.getGenerativeModel({ model: "gemini-1.5-flash" });
 }
@@ -96,22 +96,22 @@ router.post('/playlist-recommendation', async (req, res) => {
     
     const prompt = `Based on the user's current mood (${currentMood}) and desired mood (${desiredMood}), suggest a therapeutic playlist. Context: ${context || 'No additional context'}. 
 
-Provide:
-1. A playlist name
-2. Brief description (2-3 sentences)
-3. 8-12 specific song suggestions with artist names
-4. Explanation of how this playlist supports their emotional journey
+    Provide:
+    1. A playlist name
+    2. Brief description (2-3 sentences)
+    3. 8-12 specific song suggestions with artist names
+    4. Explanation of how this playlist supports their emotional journey
 
-Format your response as a JSON object with the following structure:
-{
-  "name": "playlist name",
-  "description": "brief description",
-  "songs": [
-    {"title": "song title", "artist": "artist name"},
-    ...
-  ],
-  "rationale": "explanation of how this playlist helps"
-}`;
+    Format your response as a JSON object with the following structure:
+    {
+      "name": "playlist name",
+      "description": "brief description",
+      "songs": [
+        {"title": "song title", "artist": "artist name"},
+        ...
+      ],
+      "rationale": "explanation of how this playlist helps"
+    }`;
 
     const result = await model.generateContent(prompt);
     const responseText = result.response.text();
