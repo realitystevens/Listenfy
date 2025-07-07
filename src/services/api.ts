@@ -1,4 +1,4 @@
-const API_BASE = import.meta.env.PROD ? '/api' : 'http://localhost:5000/api';
+const API_BASE = import.meta.env.PROD ? '/api' : 'http://127.0.0.1:5000/api';
 
 // Auth endpoints
 export const checkAuthStatus = async () => {
@@ -79,9 +79,11 @@ export const getAudioFeatures = async (trackIds: string) => {
   const response = await fetch(`${API_BASE}/spotify/audio-features?ids=${trackIds}`, {
     credentials: 'include'
   });
-  
+
   if (!response.ok) {
-    throw new Error('Failed to fetch audio features');
+    const error = await response.json().catch(() => ({}));
+    console.error('Failed to fetch audio features:', error);
+    throw new Error(error.error || 'Failed to fetch audio features');
   }
   
   return response.json();
