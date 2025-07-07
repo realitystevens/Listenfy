@@ -1,14 +1,32 @@
 import React, { useState, useEffect } from 'react';
-import { motion } from 'framer-motion';
-import { Heart, TrendingUp, Music, Sparkles, AlertCircle, CheckCircle } from 'lucide-react';
 import { getTopTracks, getAudioFeatures, analyzeMood } from '../services/api';
 
 interface MoodAnalysisProps {
   timeRange: string;
 }
 
+interface MoodFeatures {
+  valence: number;
+  energy: number;
+  danceability: number;
+  acousticness: number;
+}
+
+interface MoodAnalysisData {
+  mood: string;
+  confidence: number;
+  advice?: string;
+  encouragement?: string;
+  features: MoodFeatures;
+  insights?: string[];
+}
+
+interface Track {
+  id: string;
+}
+
 const MoodAnalysis: React.FC<MoodAnalysisProps> = ({ timeRange }) => {
-  const [moodData, setMoodData] = useState<any>(null);
+  const [moodData, setMoodData] = useState<MoodAnalysisData | null>(null);
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
 
@@ -20,7 +38,8 @@ const MoodAnalysis: React.FC<MoodAnalysisProps> = ({ timeRange }) => {
       try {
         // Get top tracks
         const tracksData = await getTopTracks(timeRange, 50);
-        const trackIds = tracksData.items.map((track: any) => track.id);
+        
+        const trackIds = tracksData.items.map((track: Track) => track.id);
         
         // Get audio features
         const audioFeaturesData = await getAudioFeatures(trackIds.join(','));
@@ -42,13 +61,8 @@ const MoodAnalysis: React.FC<MoodAnalysisProps> = ({ timeRange }) => {
 
   if (isLoading) {
     return (
-      <div className="flex items-center justify-center py-12">
-        <motion.div
-          animate={{ rotate: 360 }}
-          transition={{ duration: 2, repeat: Infinity, ease: "linear" }}
-          className="w-8 h-8 border-2 border-green-400 border-t-transparent rounded-full"
-        />
-        <span className="ml-3 text-white">Analyzing your musical mood...</span>
+      <div className="">
+        <span className="">Analyzing your musical mood...</span>
       </div>
     );
   }
@@ -56,7 +70,7 @@ const MoodAnalysis: React.FC<MoodAnalysisProps> = ({ timeRange }) => {
   if (error) {
     return (
       <div className="bg-red-500/20 border border-red-500/50 rounded-xl p-6 text-center">
-        <AlertCircle className="w-12 h-12 text-red-400 mx-auto mb-4" />
+        <span>Alert Icon</span>
         <p className="text-red-300">{error}</p>
       </div>
     );
@@ -93,36 +107,26 @@ const MoodAnalysis: React.FC<MoodAnalysisProps> = ({ timeRange }) => {
   return (
     <div className="space-y-6">
       {/* Main Mood Card */}
-      <motion.div
-        initial={{ opacity: 0, y: 20 }}
-        animate={{ opacity: 1, y: 0 }}
-        className="bg-white/10 backdrop-blur-lg rounded-xl p-8 border border-white/20"
-      >
+      <div className="">
         <div className="text-center mb-8">
-          <motion.div
-            initial={{ scale: 0 }}
-            animate={{ scale: 1 }}
-            transition={{ delay: 0.2, type: "spring", stiffness: 100 }}
+          <div
             className={`w-24 h-24 bg-gradient-to-r ${getMoodColor(moodData.mood)} rounded-full flex items-center justify-center text-4xl mx-auto mb-4`}
           >
             {getMoodIcon(moodData.mood)}
-          </motion.div>
+          </div>
           
           <h2 className="text-3xl font-bold text-white mb-2 capitalize">
             You're feeling {moodData.mood}
           </h2>
           
           <div className="flex items-center justify-center space-x-2 text-gray-300">
-            <TrendingUp className="w-5 h-5" />
+            <span>Trending up</span>
             <span>Confidence: {Math.round(moodData.confidence * 100)}%</span>
           </div>
         </div>
 
         {/* Advice/Encouragement */}
-        <motion.div
-          initial={{ opacity: 0, y: 20 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ delay: 0.3 }}
+        <div
           className={`p-6 rounded-xl ${
             moodData.advice 
               ? 'bg-blue-500/20 border border-blue-500/30' 
@@ -131,29 +135,24 @@ const MoodAnalysis: React.FC<MoodAnalysisProps> = ({ timeRange }) => {
         >
           <div className="flex items-start space-x-3">
             {moodData.advice ? 
-              <AlertCircle className="w-6 h-6 text-blue-400 mt-1 flex-shrink-0" /> :
-              <CheckCircle className="w-6 h-6 text-green-400 mt-1 flex-shrink-0" />
+              <span>Alert Circle</span> :
+              <span>Check Circle</span>
             }
             <p className="text-white leading-relaxed">
               {moodData.advice || moodData.encouragement}
             </p>
           </div>
-        </motion.div>
-      </motion.div>
+        </div>
+      </div>
 
       {/* Audio Features */}
-      <motion.div
-        initial={{ opacity: 0, y: 20 }}
-        animate={{ opacity: 1, y: 0 }}
-        transition={{ delay: 0.4 }}
-        className="bg-white/10 backdrop-blur-lg rounded-xl p-6 border border-white/20"
-      >
-        <div className="flex items-center space-x-2 mb-6">
-          <Music className="w-5 h-5 text-green-400" />
-          <h3 className="text-xl font-semibold text-white">Musical Characteristics</h3>
+      <div className="">
+        <div className="">
+          <span>Music Icon</span>
+          <h3 className="">Musical Characteristics</h3>
         </div>
 
-        <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
+        <div className="">
           {[
             { key: 'valence', label: 'Positivity', value: moodData.features.valence },
             { key: 'energy', label: 'Energy', value: moodData.features.energy },
@@ -178,36 +177,30 @@ const MoodAnalysis: React.FC<MoodAnalysisProps> = ({ timeRange }) => {
             </div>
           ))}
         </div>
-      </motion.div>
+      </div>
 
       {/* Insights */}
       {moodData.insights && moodData.insights.length > 0 && (
-        <motion.div
-          initial={{ opacity: 0, y: 20 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ delay: 0.5 }}
-          className="bg-white/10 backdrop-blur-lg rounded-xl p-6 border border-white/20"
+        <div
+          className=""
         >
           <div className="flex items-center space-x-2 mb-4">
-            <Sparkles className="w-5 h-5 text-purple-400" />
-            <h3 className="text-xl font-semibold text-white">Personal Insights</h3>
+            <span>Sparkle Icon</span>
+            <h3 className="">Personal Insights</h3>
           </div>
 
           <div className="space-y-3">
             {moodData.insights.map((insight: string, index: number) => (
-              <motion.div
+              <div
                 key={index}
-                initial={{ opacity: 0, x: -20 }}
-                animate={{ opacity: 1, x: 0 }}
-                transition={{ delay: 0.6 + index * 0.1 }}
                 className="flex items-start space-x-3 p-3 bg-white/5 rounded-lg"
               >
                 <div className="w-2 h-2 bg-purple-400 rounded-full mt-2 flex-shrink-0" />
                 <p className="text-gray-300">{insight}</p>
-              </motion.div>
+              </div>
             ))}
           </div>
-        </motion.div>
+        </div>
       )}
     </div>
   );

@@ -1,7 +1,5 @@
 import React, { useState, useRef, useEffect } from 'react';
-import { motion, AnimatePresence } from 'framer-motion';
-import { X, Send, Bot, User, Loader } from 'lucide-react';
-import { sendChatMessage, generatePlaylistRecommendation } from '../services/api';
+import { sendChatMessage } from '../services/api';
 
 interface ChatInterfaceProps {
   isOpen: boolean;
@@ -67,7 +65,7 @@ const ChatInterface: React.FC<ChatInterfaceProps> = ({ isOpen, onClose }) => {
         content: msg.content
       }));
 
-      const response = await sendChatMessage(inputValue, null, conversationHistory);
+      const response = await sendChatMessage(inputValue, undefined, conversationHistory);
 
       // Remove typing indicator and add response
       setMessages(prev => {
@@ -103,25 +101,15 @@ const ChatInterface: React.FC<ChatInterfaceProps> = ({ isOpen, onClose }) => {
   };
 
   return (
-    <AnimatePresence>
+    <>
       {isOpen && (
-        <motion.div
-          initial={{ opacity: 0 }}
-          animate={{ opacity: 1 }}
-          exit={{ opacity: 0 }}
-          className="fixed inset-0 bg-black/50 backdrop-blur-sm z-50 flex items-end sm:items-center justify-center p-4"
-        >
-          <motion.div
-            initial={{ opacity: 0, y: 20, scale: 0.95 }}
-            animate={{ opacity: 1, y: 0, scale: 1 }}
-            exit={{ opacity: 0, y: 20, scale: 0.95 }}
-            className="bg-white/10 backdrop-blur-lg rounded-xl border border-white/20 w-full max-w-2xl h-[600px] flex flex-col"
-          >
+        <div className="">
+          <div className="">
             {/* Header */}
             <div className="flex items-center justify-between p-4 border-b border-white/20">
               <div className="flex items-center space-x-3">
                 <div className="bg-gradient-to-r from-purple-500 to-pink-500 p-2 rounded-lg">
-                  <Bot className="w-5 h-5 text-white" />
+                  <span>Bot Icon</span>
                 </div>
                 <div>
                   <h3 className="text-lg font-semibold text-white">AI Therapy Assistant</h3>
@@ -132,17 +120,15 @@ const ChatInterface: React.FC<ChatInterfaceProps> = ({ isOpen, onClose }) => {
                 onClick={onClose}
                 className="text-gray-400 hover:text-white transition-colors"
               >
-                <X className="w-6 h-6" />
+                <span className="sr-only">Close chat</span>
               </button>
             </div>
 
             {/* Messages */}
             <div className="flex-1 overflow-y-auto p-4 space-y-4">
               {messages.map((message) => (
-                <motion.div
+                <div
                   key={message.id}
-                  initial={{ opacity: 0, y: 10 }}
-                  animate={{ opacity: 1, y: 0 }}
                   className={`flex ${message.sender === 'user' ? 'justify-end' : 'justify-start'}`}
                 >
                   <div className={`flex items-start space-x-2 max-w-[80%] ${
@@ -154,8 +140,8 @@ const ChatInterface: React.FC<ChatInterfaceProps> = ({ isOpen, onClose }) => {
                         : 'bg-gradient-to-r from-purple-500 to-pink-500'
                     }`}>
                       {message.sender === 'user' ? 
-                        <User className="w-4 h-4 text-white" /> : 
-                        <Bot className="w-4 h-4 text-white" />
+                        <span>User Icon</span> : 
+                        <span>Bot Icon</span>
                       }
                     </div>
                     <div className={`rounded-lg p-3 ${
@@ -174,7 +160,7 @@ const ChatInterface: React.FC<ChatInterfaceProps> = ({ isOpen, onClose }) => {
                       )}
                     </div>
                   </div>
-                </motion.div>
+                </div>
               ))}
               <div ref={messagesEndRef} />
             </div>
@@ -197,17 +183,17 @@ const ChatInterface: React.FC<ChatInterfaceProps> = ({ isOpen, onClose }) => {
                   className="bg-gradient-to-r from-purple-500 to-pink-500 text-white p-2 rounded-lg hover:from-purple-600 hover:to-pink-600 transition-all duration-300 disabled:opacity-50 disabled:cursor-not-allowed"
                 >
                   {isLoading ? (
-                    <Loader className="w-5 h-5 animate-spin" />
+                    <span>Loader Icon</span>
                   ) : (
-                    <Send className="w-5 h-5" />
+                    <span>Send Icon</span>
                   )}
                 </button>
               </div>
             </div>
-          </motion.div>
-        </motion.div>
+          </div>
+        </div>
       )}
-    </AnimatePresence>
+    </>
   );
 };
 
