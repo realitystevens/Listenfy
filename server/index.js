@@ -17,11 +17,11 @@ const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 
 const app = express();
-const PORT = process.env.PORT;
+const PORT = process.env.PORT || 5000;
 
 // Middleware
 app.use(cors({
-  origin: process.env.NODE_ENV === 'production' ? false : 'http://localhost:5173',
+  origin: process.env.NODE_ENV === 'production' ? false : 'http://127.0.0.1:5173',
   credentials: true
 }));
 app.use(express.json());
@@ -31,7 +31,7 @@ app.use(session({
   resave: false,
   saveUninitialized: false,
   cookie: { 
-    secure: process.env.NODE_ENV === 'production',
+    secure: process.env.NODE_ENV === 'production', 
     maxAge: 24 * 60 * 60 * 1000 // 24 hours
   }
 }));
@@ -52,5 +52,5 @@ if (process.env.NODE_ENV === 'production') {
 }
 
 app.listen(PORT, () => {
-  console.log(`Listenfy Server running on the server port ${PORT}`);
+  console.log(`Listenfy API Server running on the server port ${PORT}`);
 });
