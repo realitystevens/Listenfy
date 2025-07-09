@@ -14,7 +14,7 @@ interface UserProfile {
 }
 
 const Dashboard: React.FC<DashboardProps> = ({ onLogout }) => {
-  const [activeTab, setActiveTab] = useState('analysis');
+  const [activeTab, setActiveTab] = useState<'analysis' | 'trends' | 'music'>('analysis');
   const [userProfile, setUserProfile] = useState<UserProfile | null>(null);
   const [timeRange, setTimeRange] = useState('medium_term');
   const [isChatOpen, setIsChatOpen] = useState(false);
@@ -43,9 +43,9 @@ const Dashboard: React.FC<DashboardProps> = ({ onLogout }) => {
 
   const tabs = [
     { id: 'analysis', name: 'Mood Analysis' },
-    { id: 'trends', name: 'Trends'},
-    { id: 'music', name: 'Music Insights'}
-  ];
+    { id: 'trends', name: 'Trends' },
+    { id: 'music', name: 'Music Insights' }
+  ] as const;
 
   return (
     <div>
@@ -53,37 +53,26 @@ const Dashboard: React.FC<DashboardProps> = ({ onLogout }) => {
       <header>
         <div className="header_content">
           <div>Listenfy</div>
-
-          <div className="">
+          <div>
             {userProfile && (
-              <div className="">
+              <div>
                 <span className='profile_icon'></span>
-                <span className="">{userProfile.display_name}</span>
+                <span>{userProfile.display_name}</span>
               </div>
             )}
-
-            <button
-              onClick={handleLogout}
-              className=""
-            >
-              Logout
-            </button>
+            <button onClick={handleLogout}>Logout</button>
           </div>
         </div>
       </header>
 
       {/* Navigation */}
-      <section className="">
-        <div className="">
+      <section>
+        <div>
           {tabs.map((tab) => (
             <button
               key={tab.id}
               onClick={() => setActiveTab(tab.id)}
-              className={`flex ${
-                activeTab === tab.id
-                  ? 'border-green-400 text-green-400'
-                  : 'border-transparent0'
-              }`}
+              className={activeTab === tab.id ? 'active-tab' : ''}
             >
               <span>{tab.name}</span>
             </button>
@@ -92,26 +81,21 @@ const Dashboard: React.FC<DashboardProps> = ({ onLogout }) => {
       </section>
 
       {/* Time Filter */}
-      <div className="">
+      <div>
         <TimeFilter value={timeRange} onChange={setTimeRange} />
       </div>
 
       {/* Main Content */}
-      <main className="">
-        <div
-          key={activeTab}
-        >
+      <main>
+        <div key={activeTab}>
           {activeTab === 'analysis' && <MoodAnalysis timeRange={timeRange} />}
           {activeTab === 'trends' && <MoodTrends />}
-          {activeTab === 'music' && <div className="text-white">Music Insights Coming Soon...</div>}
+          {activeTab === 'music' && <div>Music Insights Coming Soon...</div>}
         </div>
       </main>
 
       {/* Floating Chat Button */}
-      <button
-        onClick={() => setIsChatOpen(true)}
-        className=""
-      >
+      <button onClick={() => setIsChatOpen(true)}>
         <span>Message Circle</span>
       </button>
 
