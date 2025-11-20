@@ -1,7 +1,8 @@
 {
   "name": "listenfy",
-  "description": "A music recommendation app that uses Spotify's API and Google Generative AI to create personalized playlists based on user preferences.",
-  "author": "Stevens Reality",
+  "version": "3.0.0",
+  "description": "AI-powered music mood analysis app that helps users understand their mental wellness through Spotify listening patterns",
+  "author": "Reality Stevens",
   "license": "MIT",
   "repository": {
     "type": "git",
@@ -9,55 +10,41 @@
   },
   "keywords": [
     "music",
-    "recommendation",
+    "mood-analysis",
     "spotify",
-    "google-generative-ai",
-    "playlist",
-    "react",
-    "nodejs",
-    "express",
-    "vite",
+    "ai",
+    "mental-health",
+    "next.js",
     "typescript",
-    "chatbot",
-    "web-app"
+    "therapy",
+    "wellness"
   ],
-  "private": true,
-  "version": "1.0.0",
-  "type": "module",
   "scripts": {
-    "dev": "concurrently \"npm run server\" \"npm run client\"",
-    "server": "nodemon server/index.js",
-    "client": "vite --host 127.0.0.1",
-    "build": "vite build",
-    "start": "node server/index.js",
-    "lint": "eslint .",
-    "preview": "vite preview"
+    "dev": "next dev -p 3000",
+    "build": "next build",
+    "start": "next start -p 3000",
+    "lint": "next lint"
   },
   "dependencies": {
     "@google/generative-ai": "^0.2.1",
-    "axios": "^1.10.0",
-    "cookie-parser": "^1.4.6",
-    "cors": "^2.8.5",
-    "dotenv": "^16.3.1",
-    "express": "^4.18.2",
-    "express-session": "^1.17.3",
-    "react": "^18.3.1",
-    "react-dom": "^18.3.1",
-    "recharts": "^2.8.0"
+    "lucide-react": "^0.344.0",
+    "next": "^14.1.0",
+    "react": "^18.2.0",
+    "react-dom": "^18.2.0",
+    "recharts": "^2.10.0"
   },
   "devDependencies": {
-    "@eslint/js": "^9.9.1",
-    "@types/react": "^18.3.5",
-    "@types/react-dom": "^18.3.0",
-    "@vitejs/plugin-react": "^4.3.1",
-    "concurrently": "^8.2.2",
-    "eslint": "^9.9.1",
-    "eslint-plugin-react-hooks": "^5.1.0-rc.0",
-    "eslint-plugin-react-refresh": "^0.4.11",
-    "globals": "^15.9.0",
-    "nodemon": "^3.0.1",
-    "typescript": "^5.5.3",
-    "typescript-eslint": "^8.3.0",
-    "vite": "^5.4.2"
+    "@types/node": "^20.11.5",
+    "@types/react": "^18.2.48",
+    "@types/react-dom": "^18.2.18",
+    "autoprefixer": "^10.4.17",
+    "eslint": "^8.56.0",
+    "eslint-config-next": "^14.1.0",
+    "postcss": "^8.4.33",
+    "tailwindcss": "^3.4.1",
+    "typescript": "^5.3.3"
+  },
+  "engines": {
+    "node": ">=18.17.0"
   }
 }
