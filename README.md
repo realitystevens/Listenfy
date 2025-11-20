@@ -1,19 +1,17 @@
 # Listenfy - AI Music Mood Analysis
 
-![Listenfy Banner](https://img.shields.io/badge/Listenfy-AI%20Music%20Mood%20Analysis-purple?style=for-the-badge)
-
 Listenfy is an AI-powered web application that analyzes your Spotify listening patterns to provide insights into your mental wellness and mood. Get personalized mood reports, track emotional trends over time, and chat with an AI therapy assistant for guidance and support.
 
-## ✨ Features
+## Features
 
-- 🎵 **Mood Analysis**: Analyze your mental state based on Spotify listening patterns
-- 📊 **Mood Trends**: Track your emotional wellness over time with beautiful visualizations
-- 🤖 **AI Therapy Assistant**: Chat with an empathetic AI assistant for mental health support
-- 🎨 **Beautiful UI**: Modern, responsive design with glassmorphism effects
-- 🔒 **Secure Authentication**: OAuth 2.0 integration with Spotify
-- 📱 **Fully Responsive**: Works seamlessly on desktop, tablet, and mobile devices
+- **Mood Analysis**: Analyze your mental state based on Spotify listening patterns
+- **Mood Trends**: Track your emotional wellness over time with beautiful visualizations
+- **AI Therapy Assistant**: Chat with an empathetic AI assistant for mental health support
+- **Beautiful UI**: Modern, responsive design with glassmorphism effects
+- **Secure Authentication**: OAuth 2.0 integration with Spotify
+- **Fully Responsive**: Works seamlessly on desktop, tablet, and mobile devices
 
-## 🚀 Getting Started
+
 
 ### Prerequisites
 
@@ -63,7 +61,7 @@ Listenfy is an AI-powered web application that analyzes your Spotify listening p
    
    Navigate to [http://127.0.0.1:3000](http://127.0.0.1:3000)
 
-## 🛠️ Tech Stack
+## Tech Stack
 
 - **Framework**: Next.js 14 (App Router)
 - **Language**: TypeScript
@@ -74,7 +72,7 @@ Listenfy is an AI-powered web application that analyzes your Spotify listening p
 - **Authentication**: Spotify OAuth 2.0
 - **API**: Spotify Web API
 
-## 📁 Project Structure
+## Project Structure
 
 ```
 listenfy/
@@ -102,7 +100,7 @@ listenfy/
 └── package.json         # Dependencies
 ```
 
-## 🎯 How It Works
+## How It Works
 
 1. **Authentication**: Users log in with their Spotify account
 2. **Data Collection**: The app fetches user's listening history and audio features
@@ -110,36 +108,13 @@ listenfy/
 4. **Insights Generation**: Personalized insights and recommendations are created
 5. **AI Chat**: Users can discuss their mood with an AI therapy assistant
 
-## 🔐 Privacy & Security
+## Privacy & Security
 
 - All Spotify data is processed in real-time and not stored permanently
 - OAuth 2.0 ensures secure authentication
 - HTTP-only cookies protect session data
 - No personal data is shared with third parties
 
-## 📝 License
 
-This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
 
-## 👨‍💻 Author
-
-**Stevens Reality**
-- GitHub: [@realitystevens](https://github.com/realitystevens)
-
-## 🙏 Acknowledgments
-
-- Spotify for their amazing Web API
-- Google for Gemini AI
-- The Next.js team for an excellent framework
-
-## ⚠️ Disclaimer
-
-Listenfy is designed to provide insights and support but is not a replacement for professional mental health care. If you're experiencing serious mental health issues, please consult with a qualified healthcare professional.
-
-## 🤝 Contributing
-
-Contributions, issues, and feature requests are welcome! Feel free to check the [issues page](https://github.com/realitystevens/listenfy/issues).
-
-## ⭐ Show Your Support
-
-Give a ⭐️ if this project helped you!
+- Contributions, issues, and feature requests are welcome! Feel free to check the [issues page](https://github.com/realitystevens/listenfy/issues).
